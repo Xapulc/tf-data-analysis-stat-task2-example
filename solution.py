@@ -1,17 +1,15 @@
 import pandas as pd
 import numpy as np
+from scipy.stats import t
 
-from scipy.stats import norm
+chat_id = 1399245853 
 
-
-chat_id = 123456 # Ваш chat ID, не меняйте название переменной
-
-def solution(p: float, x: np.array) -> tuple:
-    # Измените код этой функции
-    # Это будет вашим решением
-    # Не меняйте название функции и её аргументы
-    alpha = 1 - p
-    loc = x.mean()
-    scale = np.sqrt(np.var(x)) / np.sqrt(len(x))
-    return loc - scale * norm.ppf(1 - alpha / 2), \
-           loc - scale * norm.ppf(alpha / 2)
+def symmetric_confidence_interval(alpha, measurements):
+    n = measurements.size
+    x_mean = np.mean(measurements)
+    s = np.sqrt(np.var(measurements, ddof=1))
+    t_alpha_2 = t.ppf(1 - alpha/2, df=n-1)
+    delta = t_alpha_2 * s / np.sqrt(n)
+    left_boundary = x_mean - delta
+    right_boundary = x_mean + delta
+    return (left_boundary, right_boundary)
